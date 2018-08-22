@@ -13,10 +13,15 @@ https://www.wireshark.org/download.html
 Make sure you get the most recent stable version for whatever operating system you're using.  The installer may not look the same on different platforms, but generally you will want to intall all the utilities besides Wireshark 1 (an old version of the software).  If you are on a Windows machine, it will prompt you to install winpcap.  You will need this, as it is the driver for capturing on Windows.  It will next ask if you want to install USBPcap.  This is the driver for capturing traffic on a USB device, which is fun if you want to plug your phone into your computer to see what it's up to.  However, you will not need that in this lab, and installing USBPcap will require you to reboot your computer.  
 
 ## Your first capture
+Now that you have Wireshark installed, go ahead and open it up.  At the home screen, you will see a few options that you can capture from.  Try opening a YouTube video.  Did you notice a spike in activity on one of the bars?  That is your Network Interface Card.  Double click it and capture some packets for a few seconds, then click the stop button in the top left.  
 
+## What in tarnation am I looking at here
+There should be several packets on your screen now that we can experiment with.  Because of how much traffic there can be on networks, if you ever want to find what you're looking for here you will need to use filters.  In the filter bar at the top, try entering different things like `TCP` or `HTTP` and see what happens.  What if you want to be able to see everything, but you just want to highlight what you're looking for?  Then coloring rules are your friend!  Check out view -> coloring rules to see what all the colors the packets have been highlighted as mean.  This is also a great place to get an example of the syntax for the filter bar, as the logic behind every coloring rule is simply a filter.
+
+There should be three different sections at your main screen.  When you click on a packet, it will display readable information about that packet in the second section and not-so-readable information in the third section (which you can close by dragging it down to the bottom of the screen as you will not need that).  Try finding an HTTP request and expanding some sections.
 
 ## Let's hack
-Every packet you capture contains a stupid big amount of information.  For this demo, we are going to capture a packet that contains an encrypted username and password, then decrypt it.  First, we will need a form to submit data to that will encrypt said data before sending it out.  Luckily we don't need to make this, as one already exists for testing purposes.  
+Every packet you capture contains an immense amount of information.  For this demo, we are going to capture a packet that contains an encrypted username and password, then decrypt it.  First, we will need a form to submit data to that will encrypt said data before sending it out.  Luckily we don't need to make this, as one already exists for testing purposes.  
   
 *MAKE SURE YOU BEGIN A NEW CAPTURE BEFORE PROCEEDING*  
 
