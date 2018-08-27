@@ -37,7 +37,14 @@ Password: `network`
   
 Now let's find the packet with the information we just sent.  Once you have located it, check out that string of text following the “Authorization: Basic” header in the client’s HTTP GET message.  If you have a basic understanding of encryption, this format may look familiar to you (and you probably know where we're going with this).  Why don't we drop that text into a Base64 decoder and see what we get?  You can use this one:  
   
-https://www.base64decode.org/
+https://www.base64decode.org/  
+
+<details>
+<summary>If you need help finding the packet, click here</summary>
+<br>
+Hint will go here eventually lol
+</details>
+
   
 ## Use your powers for good, not evil
 As you can see, Wireshark is a very powerful network analysis tool.  However, you should only use this software to analyze your own networks and package captures.  Using Wireshark to sniff packets on a public/business network is completely illegal, and I do not condone it.  I hope you enjoyed this quick look into networks and analyzing them!
