@@ -23,7 +23,7 @@ There should be three different sections at your main screen.  When you click on
 ## Let's hack
 Every packet you capture contains an immense amount of information.  For this demo, we are going to capture a packet that contains an encrypted username and password, then decrypt it.  First, we will need a form to submit data to that will encrypt said data before sending it out.  Luckily we don't need to make this, as one already exists for testing purposes.  
   
-*MAKE SURE YOU BEGIN A NEW CAPTURE BEFORE PROCEEDING*  
+**MAKE SURE YOU BEGIN A NEW CAPTURE BEFORE PROCEEDING**  
 
 Follow this link:  
   
@@ -33,7 +33,7 @@ You will be met with a prompt to enter a username and password.  The credentials
 Username: `wireshark-students`  
 Password: `network`  
   
-*AFTER SUBMITTING THE FORM, END THE CAPTURE*  
+**AFTER SUBMITTING THE FORM, END THE CAPTURE**  
   
 Now let's find the packet with the information we just sent.  Once you have located it, check out that string of text following the “Authorization: Basic” header in the client’s HTTP GET message.  If you have a basic understanding of encryption, this format may look familiar to you (and you probably know where we're going with this).  Why don't we drop that text into a Base64 decoder and see what we get?  You can use this one:  
   
