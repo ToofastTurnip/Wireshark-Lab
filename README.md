@@ -35,7 +35,7 @@ Password: `network`
   
 **AFTER SUBMITTING THE FORM, END THE CAPTURE**  
   
-Now let's find the packet with the information we just sent.  Once you have located it, check out that string of text following the “Authorization: Basic” header in the client’s HTTP GET message.  If you have a basic understanding of encryption, this format may look familiar to you (and you probably know where we're going with this).  Why don't we drop that text into a Base64 decoder and see what we get?  You can use this one:  
+Now let's find the packet with the information we just sent.  Once you have located it, check out that string of text following the “Authorization: Basic” part of the HTTP GET message.  If you have a basic understanding of encryption, this format may look familiar to you (and you probably know where we're going with this).  Why don't we drop that text into a Base64 decoder and see what we get?  You can use this one:  
   
 https://www.base64decode.org/  
 
