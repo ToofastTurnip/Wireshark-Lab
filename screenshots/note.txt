@@ -1,10 +1,5 @@
-Screenshots will live in this directory when I actually decide to make them  
-  
-  
 Still TODO:  
--Take screenshots  
 -Add screenshots to this directory and link them to the readme  
--Walkthrough lab to ensure completion  
 -Delete this txt file when done
 -Mark screenshots with guides
 -Add to readme how filter works (green/red for valid/invalid)
