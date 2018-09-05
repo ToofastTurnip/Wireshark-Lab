@@ -1,7 +1,6 @@
 # Wireshark-Lab
 By the end of this short lab, you should be very disappointed when you see this string of characters: `cGFzc3dvcmQ=`  
 <br/>
-<br/>
 ## What's a Wireshark?
 Wireshark is a packet sniffer used by many network technicians to help them easily identify issues in their network.  It provides a wealth of information on all packets it analyzes and includes a powerful filter feature so you can find exactly what you are looking for by filtering out certain traffic or protocols.  
 
