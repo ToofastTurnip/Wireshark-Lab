@@ -13,12 +13,16 @@ https://www.wireshark.org/#download
 Make sure you get the most recent stable version for whatever operating system you're using.  The installer may not look the same on different platforms.  On the most recent Mac stable build you will not be prompted for any extra utilities, but on Windows you will want to install all utilities besides Wireshark 1 (an old version of the software).  You will also be prompted to install WinPcap, leave this checked as it is the driver for capturing on Windows.  It will next ask if you want to install USBPcap.  This is the driver for capturing traffic on a USB device, which is fun if you want to plug your phone into your computer to see what it's up to.  However, you will not need that in this lab, and installing USBPcap will require you to reboot your computer.  
 
 ## Your first capture
-Now that you have Wireshark installed, go ahead and open it up.  At the home screen, you will see a few options that you can capture from.  Unles you have multiple wifi cards and/or ethernet connections, there should be only one bar with activity.  That is your Network Interface Card.  Double click it and capture some packets for a few seconds.  Try different things like logging into your social media or watching a video so you can get a variety of packets.  You can click the stop button in the top left when you are ready to move on.  
+Now that you have Wireshark installed, go ahead and open it up.  At the home screen, you will see a few options that you can capture from.  Unles you have multiple wifi cards and/or ethernet connections, there should be only one bar with activity.  That is your Network Interface Card.  
+  
+![HomeScreenScreenshot](/screenshots/homeScreen.png?raw=true "Yeah that purple one")  
+  
+Double click it and capture some packets for a few seconds.  Try different things like logging into your social media or watching a video so you can get a variety of packets.  You can click the stop button in the top left when you are ready to move on.  
 
 ## What in tarnation am I looking at here
 There should be several packets on your screen now that we can experiment with.  Because of how much traffic there can be on networks, if you ever want to find what you're looking for here you will need to use filters.  In the filter bar at the top, try entering different things like `TCP` or `HTTP` and see what happens.  What if you want to be able to see everything, but you just want to highlight what you're looking for?  Then coloring rules are your friend!  Check out view -> coloring rules to see what all the colors the packets have been highlighted as mean.  This is also a great place to get an example of the syntax for the filter bar, as the logic behind every coloring rule is simply a filter.  You will see that filters can be made to be as specific as you want them to be for whatever you need to do.  
   
-![ColoringRulesScreenshot](/screenshots/coloringRules.png?raw=true "Coloring rulez!")
+![ColoringRulesScreenshot](/screenshots/coloringRules.png?raw=true "Coloring rulez!")  
 
 There should be three different sections at your main screen.  When you click on a packet, it will display readable information about that packet in the second section and not-so-readable information in the third section (which you can close by dragging it down to the bottom of the screen as you will not need that).  Try finding an HTTP request and expanding some sections.
 
@@ -31,7 +35,11 @@ Follow this link:
   
 http://gaia.cs.umass.edu/wireshark-labs/protected_pages/HTTP-wiresharkfile-5.html  
   
-You will be met with a prompt to enter a username and password.  The credentials for this server are:  
+You will be met with a prompt to enter a username and password.  
+  
+![GaiaLoginScreenshot](/screenshots/gaiaLogin.png?raw=true "Login prompt")  
+  
+The credentials for this server are:  
 Username: `wireshark-students`  
 Password: `network`  
   
