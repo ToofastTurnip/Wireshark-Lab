@@ -1,0 +1,53 @@
+Network Protocols
+Rules and procedures for transmitting data across a network.
+
+OSI (Open Systems Interconnection) Model - separates network communitation into 7 layers of abstraction:
+1: Physical Layer - electronic cicuit transmission (bits, not data packets)
+USB, Bluetooth
+2: Data Link Layer - transferring data between network nodes
+Ethernet
+3: Network Layer - packets get forwarded here otherwise known as routing
+IPv4, IPv6
+4: Transport Layer - 
+TCP
+5: Session Layer
+6: Presentation Layer
+7: Application Layer
+
+Most common:
+TCP/IP
+ARP
+DHCP
+DNS
+(S/T)FTP
+HTTP(S)
+
+
+TCP
+IP
+
+ARP
+
+DHCP
+
+DNS
+
+FTP
+SFTP
+TFTP
+
+HTTP (Hypertext Transfer Protocol, 80)
+HTTPS (Hypetext Transfer Protocol Secure, 443)
+
+
+BONUS PROTOCOL
+telnet (Teletype Network, 23)
+Establishes remote terminal connection for bidirectional text based communication.
+This allows the user of one computer to log into another computer on the same network.
+telnet towel.blinkenlights.nl
+(some versions of mac dont have telnet on them anymore so `brew install telnet`)
+bonnus fact: SSH (secure socket shell, 22) is basically just secure telnet
+
+BONUS PROTOCOL AGAIN
+H.323 port 1720/1721 for video conferences
+SIP port 5060/5061 for computer-telephone (audio conferences)
