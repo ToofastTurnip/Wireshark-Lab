@@ -1,18 +1,22 @@
 Network Protocols
 Rules and procedures for transmitting data across a network.
+Hope you're ready for too many acronyms
 
 OSI (Open Systems Interconnection) Model - separates network communitation into 7 layers of abstraction:
 1: Physical Layer - electronic cicuit transmission (bits, not data packets)
 USB, Bluetooth
 2: Data Link Layer - transferring data between network nodes
-Ethernet
+Ethernet, ARP
 3: Network Layer - packets get forwarded here otherwise known as routing
 IPv4, IPv6
-4: Transport Layer - 
+4: Transport Layer - host-to-host communication
 TCP
-5: Session Layer
-6: Presentation Layer
-7: Application Layer
+5: Session Layer - manages session between end-user application processes
+6: Presentation Layer - data translation
+7: Application Layer - displays information received to the user
+DNS, HTTP, FTP
+
+
 
 Most common:
 TCP/IP
@@ -23,21 +27,35 @@ DNS
 HTTP(S)
 
 
-TCP
-IP
+TCP (Transmission Control Protocol)
+Delivers bytes between applications running on hosts
+IP (Internet Protocol)
+Responsible for routing from a source host to a destination host across one or more IP networks by using an addressing system
 
-ARP
+ARP (Address Resolution Protocol)
+Responsible for discovering MAC address
+In Wireshark ARP packets are usually read as "Who has #.#.#.#? Tell #.#.#.#"
+This means the IP address after the 'Tell' part knows it wants to send data to the IP address after 'Who has' but it doesn't know the MAC address yet
 
-DHCP
+DHCP (Dynamic Host Configuration Protocol)
+Responsible for dynamically assigning IP addresses and any other necesary parameters to each device on a network
 
-DNS
+DNS (Domain Name System)
+Translates memorized domain names into into numerical IP addresses
+Cloudflare's 1.1.1.1 is a great alternative to your ISP's DNS resolver
+Also consider building a Pi-hole to use as your DNS server
 
-FTP
-SFTP
-TFTP
+FTP (File Transfer Protocol, 20/21) used to transfer files between a client and a server (bet you never would have guessed that)
+This was not designed to be a secure protocol, so SFTP (SSH File Transfer Protocol, 22) is a better solution
+TFTP (Trivial File Transfer Protocol, 69) for small files (no authentication)
 
 HTTP (Hypertext Transfer Protocol, 80)
+The foundatioin for communication on the World Wide Web
+This is what actually transfers the website to a user in the form of instructions like a text document
+GET/POST/PUT/DELETE and a few others
+The fist line of an HTTP response is the status line (100 info, 200 success, 300 redirection, 400 client error, 500 server error)
 HTTPS (Hypetext Transfer Protocol Secure, 443)
+Extension of HTTP which is encrypted with TLS (Transfer Layer Security)
 
 
 BONUS PROTOCOL
@@ -45,8 +63,8 @@ telnet (Teletype Network, 23)
 Establishes remote terminal connection for bidirectional text based communication.
 This allows the user of one computer to log into another computer on the same network.
 telnet towel.blinkenlights.nl
-(some versions of mac dont have telnet on them anymore so `brew install telnet`)
-bonnus fact: SSH (secure socket shell, 22) is basically just secure telnet
+(some versions of mac dont have telnet on them so `brew install telnet`)
+bonus fact: SSH (secure socket shell, 22) is basically just secure telnet
 
 BONUS PROTOCOL AGAIN
 H.323 port 1720/1721 for video conferences
