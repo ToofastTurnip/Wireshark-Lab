@@ -1,3 +1,5 @@
+#This is a text version of the slides in the event that you are on a device that cannot view the slides
+
 Network Protocols
 Rules and procedures for transmitting data across a network.
 Hope you're ready for too many acronyms
@@ -50,7 +52,7 @@ This was not designed to be a secure protocol, so SFTP (SSH File Transfer Protoc
 TFTP (Trivial File Transfer Protocol, 69) for small files (no authentication)
 
 HTTP (Hypertext Transfer Protocol, 80)
-The foundatioin for communication on the World Wide Web
+The foundation for communication on the World Wide Web
 This is what actually transfers the website to a user in the form of instructions like a text document
 GET/POST/PUT/DELETE and a few others
 The fist line of an HTTP response is the status line (100 info, 200 success, 300 redirection, 400 client error, 500 server error)
