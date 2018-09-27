@@ -1,5 +1,0 @@
-Still TODO:  
--Add screenshots to this directory and link them to the readme  
--Delete this txt file when done
--Mark screenshots with guides
--Add to readme how filter works (green/red for valid/invalid)
