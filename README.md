@@ -19,7 +19,7 @@ Now that you have Wireshark installed, go ahead and open it up.  At the home scr
 Double click it and capture some packets for a few seconds.  Try different things like logging into your social media or watching a video so you can get a variety of packets.  You can click the stop button in the top left when you are ready to move on.  
 
 ## What in tarnation am I looking at here
-There should be several packets on your screen now that we can experiment with.  Because of how much traffic there can be on networks, if you ever want to find what you're looking for here you will need to use filters.  In the filter bar at the top, try typing in different things like `tcp` or `http`, hit enter, and see what happens.  What if you want to be able to see everything, but you just want to _highlight_ what you're looking for?  Then coloring rules are your friend!  Check out view -> coloring rules to see what all the colors the packets have been highlighted as mean.  This is also a great place to get an example of the syntax for the filter bar, as the logic behind every coloring rule is simply a filter.  You will see that filters can be made to be as specific as you want them to be for whatever you need to do.  
+There should be several packets on your screen now that we can experiment with.  Because of how much traffic there can be on networks, if you ever want to find what you're looking for here you will need to use filters.  In the filter bar at the top, try typing in different things like `tcp` or `http`, hit enter, and see what happens.  What if you want to be able to see everything, but you just want to _highlight_ what you're looking for?  Then coloring rules are your friend!  Check out view -> coloring rules to see what all the colors the packets have been highlighted as mean.  This is also a great place to get an example of the syntax for the filter bar, as the logic behind every coloring rule is simply a filter.  You will see that filters can be made to be as specific as you want them to be for whatever you need to do.  Also, notice that the filter bar will turn green if your syntax is valid and red if it is not.  
   
 ![ColoringRulesScreenshot](/screenshots/coloringRules.png?raw=true "Coloring rulez!")  
 
@@ -51,7 +51,9 @@ https://www.base64decode.org/
 <details>
 <summary>If you need help finding the packet, click here</summary>
 <br>
-Hint will go here eventually lol
+You will need to enter `http` in the filter bar and open the first packet.  Expand `Hypertext Transfer Protocol` and you should see the authorization in question on the fourth line.  
+  
+![HttpGetFullScreenshot](/screenshots/httpGetFull.png?raw=true "There it is!") 
 </details>
 
   
