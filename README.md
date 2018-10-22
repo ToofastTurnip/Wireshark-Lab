@@ -51,7 +51,7 @@ https://www.base64decode.org/
 <details>
 <summary>If you need help finding the packet, click here</summary>
 <br>
-You will need to enter `http` in the filter bar and open the first packet.  Expand `Hypertext Transfer Protocol` and you should see the authorization in question on the fourth line.  
+You will need to enter `http` in the filter bar and open the first packet.  Expand `Hypertext Transfer Protocol` and you should see the authorization in question on the fourth line (8th line once you've expanded it).  
   
 ![HttpGetFullScreenshot](/screenshots/httpGetFull.png?raw=true "There it is!") 
 </details>
