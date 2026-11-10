@@ -55,7 +55,7 @@ OSI is the shared vocabulary: "that's a layer 2 problem."
 Scapy (a Python library) builds packets the same way:
   from scapy.all import Ether, IP, TCP
   pkt = Ether() / IP(dst="128.119.245.12") / TCP(dport=80) / "GET / HTTP/1.1\r\n\r\n"
-In Wireshark, the middle pane is this diagram, outside in: Ethernet II, Internet Protocol, TCP, then HTTP.
+In Wireshark, the packet details pane is this diagram, outside in: Ethernet II, Internet Protocol, TCP, then HTTP.
 
 
 == 6. Protocol by protocol ==

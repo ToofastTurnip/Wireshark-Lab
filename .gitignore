@@ -1,0 +1,5 @@
+# macOS Finder metadata
+.DS_Store
+
+# Office lock files (created while a deck is open)
+~$*
