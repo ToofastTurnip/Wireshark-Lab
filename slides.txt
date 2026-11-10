@@ -1,73 +1,224 @@
 #This is a text version of the slides in the event that you are on a device that cannot view the slides
+#(There's also a PDF version: Network Protocols.pdf)
 
-Network Protocols
-Rules and procedures for transmitting data across a network.
-Hope you're ready for too many acronyms
-
-OSI (Open Systems Interconnection) Model - separates network communitation into 7 layers of abstraction:
-1: Physical Layer - electronic cicuit transmission (bits, not data packets)
-USB, Bluetooth
-2: Data Link Layer - transferring data between network nodes
-Ethernet, ARP
-3: Network Layer - packets get forwarded here otherwise known as routing
-IPv4, IPv6
-4: Transport Layer - host-to-host communication
-TCP
-5: Session Layer - manages session between end-user application processes
-6: Presentation Layer - data translation
-7: Application Layer - displays information received to the user
-DNS, HTTP, FTP
+== 1. Network Protocols ==
+The APIs your computer already uses to talk to every other computer
+Hope you're ready for acronyms.
 
 
+== 2. A protocol is an API between machines ==
+When you call a library, you don't need to know how it works inside. You follow its contract:
+what to send, what comes back, and what the errors mean.
+A protocol is the same kind of contract, written for two machines instead of two pieces of code.
+Every device follows the same spec, so any two can talk.
+And it's already written. It ships in your OS, your browser, and libraries like requests.
 
-Most common:
-TCP/IP
-ARP
-DHCP
-DNS
-(S/T)FTP
-HTTP(S)
-
-
-TCP (Transmission Control Protocol)
-Delivers bytes between applications running on hosts
-IP (Internet Protocol)
-Responsible for routing from a source host to a destination host across one or more IP networks by using an addressing system
-
-ARP (Address Resolution Protocol)
-Responsible for discovering MAC address
-In Wireshark ARP packets are usually read as "Who has #.#.#.#? Tell #.#.#.#"
-This means the IP address after the 'Tell' part knows it wants to send data to the IP address after 'Who has' but it doesn't know the MAC address yet
-
-DHCP (Dynamic Host Configuration Protocol)
-Responsible for dynamically assigning IP addresses and any other necesary parameters to each device on a network
-
-DNS (Domain Name System)
-Translates memorized domain names into into numerical IP addresses
-Cloudflare's 1.1.1.1 is a great alternative to your ISP's DNS resolver
-Also consider building a Pi-hole to use as your DNS server
-
-FTP (File Transfer Protocol, 20/21) used to transfer files between a client and a server (bet you never would have guessed that)
-This was not designed to be a secure protocol, so SFTP (SSH File Transfer Protocol, 22) is a better solution
-TFTP (Trivial File Transfer Protocol, 69) for small files (no authentication)
-
-HTTP (Hypertext Transfer Protocol, 80)
-The foundation for communication on the World Wide Web
-This is what actually transfers the website to a user in the form of instructions like a text document
-GET/POST/PUT/DELETE and a few others
-The fist line of an HTTP response is the status line (100 info, 200 success, 300 redirection, 400 client error, 500 server error)
-HTTPS (Hypetext Transfer Protocol Secure, 443)
-Extension of HTTP which is encrypted with TLS (Transfer Layer Security)
+  IN YOUR CODE                   ON THE NETWORK
+  Function signature        ->   Message format (fields and headers every message needs)
+  Call order                ->   Message order (handshake, data, teardown)
+  Return values/exceptions  ->   Status and error codes (200 OK, 404 Not Found)
+  A library you import      ->   Code built into your OS (already on every device)
 
 
-BONUS PROTOCOL
-telnet (Teletype Network, 23)
-Establishes remote terminal connection for bidirectional text based communication.
-This allows the user of one computer to log into another computer on the same network.
-telnet towel.blinkenlights.nl
-(some versions of mac dont have telnet on them so `brew install telnet`)
-bonus fact: SSH (secure socket shell, 22) is basically just secure telnet
+== 3. One line of Python. Six protocols. ==
+You write this:   requests.get("https://example.com")
+And your computer does all of this:
+  01 DHCP  (get an address)    Gave your laptop an IP address when it joined Wi-Fi
+  02 ARP   (find the router)   Finds your router's MAC address so the first hop can be delivered
+  03 DNS   (find the server)   Turns example.com into an IP address
+  04 TCP   (connect)           Opens a reliable connection with a three-way handshake
+  05 TLS   (encrypt)           Encrypts the connection and checks the server's certificate
+  06 HTTP  (ask for the page)  Sends GET / and gets back 200 OK
+You wrote one line. Wireshark lets you watch every one of these happen.
 
-BONUS PROTOCOL AGAIN
-H.323 port 1720/1721 for video conferences
-SIP port 5060/5061 for computer-telephone (audio conferences)
+
+== 4. The OSI model: 7 layers of abstraction ==
+7 Application   - protocols apps use to talk to each other          (HTTP, DNS, FTP)
+6 Presentation  - data translation: encoding, compression, encryption (TLS, UTF-8)
+5 Session       - opening, managing, and closing conversations      (RPC, NetBIOS)
+4 Transport     - process-to-process delivery, using ports          (TCP, UDP)
+3 Network       - addressing and routing across networks            (IPv4, IPv6)
+2 Data Link     - delivery between devices on the same network      (Ethernet, Wi-Fi, ARP)
+1 Physical      - bits as electrical, light, or radio signals       (cables, fiber, radio)
+Why layers? Each layer only calls the layer directly below it, through a fixed interface.
+HTTP doesn't care whether it's riding on Wi-Fi or fiber, the same way your code doesn't care which disk a file is on.
+In practice: the internet runs on the simpler 4-layer TCP/IP model, where layers 5 to 7 are one application layer.
+OSI is the shared vocabulary: "that's a layer 2 problem."
+
+
+== 5. Every layer wraps the one above it (encapsulation) ==
+[ Ethernet frame: adds source and destination MAC address
+  [ IP packet: adds source and destination IP address
+    [ TCP segment: adds ports, sequence numbers, ACKs
+      [ HTTP request: the data you actually sent ]]]]
+
+Scapy (a Python library) builds packets the same way:
+  from scapy.all import Ether, IP, TCP
+  pkt = Ether() / IP(dst="128.119.245.12") / TCP(dport=80) / "GET / HTTP/1.1\r\n\r\n"
+In Wireshark, the middle pane is this diagram, outside in: Ethernet II, Internet Protocol, TCP, then HTTP.
+
+
+== 6. Protocol by protocol ==
+What each one does, how your code already calls it, and how to find it in Wireshark.
+Real code is Python you can run. Pseudo-code shows the idea.
+
+
+== 7. IP: Internet Protocol (layer 3, network) ==
+Gives every device an address and moves packets toward that address, one router hop at a time.
+*cough* hence the name IP address *cough*
+- Best effort: packets can be dropped, duplicated, or arrive out of order. Fixing that is TCP's job.
+- IPv4 addresses look like 128.119.245.12; IPv6 like 2001:db8::1.
+- Every router lowers the TTL by one and drops the packet at zero, so lost packets can't loop forever.
+- Try it: traceroute gaia.cs.umass.edu (Windows: tracert) lists every router on the way.
+API (pseudo-code):
+  ip.send(src="192.168.1.23", dst="128.119.245.12", ttl=64, payload=segment)
+  # returns nothing, promises nothing
+Wireshark filter: ip.addr == 128.119.245.12
+
+
+== 8. TCP: Transmission Control Protocol (layer 4, transport) ==
+Turns IP's unreliable packets into a reliable, ordered stream of bytes between two programs.
+The port number says which program.
+- Opens with a three-way handshake: SYN, SYN-ACK, ACK.
+- Numbers every byte. Anything the other side doesn't acknowledge gets resent.
+- Closes with FIN and ACK.
+- Used by HTTPS, SSH, email, and file transfers.
+Real code (Python):
+  import socket
+  s = socket.create_connection(("gaia.cs.umass.edu", 80))   # the handshake happens here
+  s.sendall(b"GET / HTTP/1.0\r\n\r\n")
+  data = s.recv(4096)   # in order, no gaps
+  s.close()             # FIN, ACK
+Wireshark filter: tcp.flags.syn == 1
+
+
+== 9. UDP: User Datagram Protocol (layer 4, transport) ==
+Sends independent messages (datagrams) to a port with no setup and no promises. Less overhead means lower latency.
+- No handshake, no acknowledgments, no retransmits.
+- Messages can be lost or arrive out of order. The app decides whether it cares.
+- Great when late data is useless anyway: video calls, games, live streams.
+- Also carries DNS, DHCP, and QUIC (HTTP/3).
+Real code (Python):
+  import socket
+  s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+  s.sendto(b"hello?", ("192.168.1.50", 9999))
+  # returns 6 (bytes sent), and that's it: no connection, no reply, no idea if it arrived
+Wireshark filter: udp
+
+
+== 10. ARP: Address Resolution Protocol (layer 2, data link) ==
+IP addresses get a packet to the right network. MAC addresses get it to the right device on that network.
+ARP finds the MAC address that goes with an IP.
+- Wireshark shows it as "Who has 192.168.1.1? Tell 192.168.1.23"
+- The question is broadcast to every device on the network. Only the owner answers.
+- Answers are cached, so your computer doesn't ask every time.
+- Try it: arp -a shows your computer's cache.
+API (pseudo-code):
+  mac = arp.who_has("192.168.1.1")   # your OS calls this before talking to the router
+Wireshark filter: arp
+
+
+== 11. DHCP: Dynamic Host Configuration Protocol (layer 7, application) ==
+When you join a network, DHCP hands your device everything it needs to use it:
+an IP address, the router's address, and which DNS server to ask.
+- Four messages: Discover, Offer, Request, Acknowledge (DORA).
+- Runs over UDP: port 67 on the server, 68 on the client.
+- Addresses are leased, not owned. Your device renews before the lease runs out.
+- Try it: ipconfig getpacket en0 (Mac) or ipconfig /all (Windows).
+API (pseudo-code):
+  lease = dhcp.request_lease()   # your OS calls this when you join Wi-Fi
+  lease.ip, lease.router, lease.dns_servers, lease.lease_time
+Wireshark filter: dhcp (turn your Wi-Fi off and on while capturing)
+
+
+== 12. DNS: Domain Name System (layer 7, application) ==
+The internet's phone book. Turns names people can remember into IP addresses computers can route to.
+- Usually UDP port 53 and unencrypted, so anyone on the path can see which names you look up.
+- Answers are cached, each with a time to live (TTL).
+- Record types: A (IPv4), AAAA (IPv6), CNAME (alias), MX (mail).
+- Cloudflare's 1.1.1.1 is a great alternative to your ISP's resolver. Or build a Pi-hole.
+Real code (Python + terminal):
+  import socket
+  socket.gethostbyname("gaia.cs.umass.edu")   # '128.119.245.12'
+  nslookup gaia.cs.umass.edu                  # from any terminal
+Wireshark filter: dns
+
+
+== 13. HTTP: Hypertext Transfer Protocol (layer 7, application) ==
+The request/response protocol of the web, on TCP port 80. The client sends a method and a path.
+The server sends back a status code, headers, and a body.
+Methods (the CRUD of the web): GET (read), POST (create), PUT (replace), DELETE (delete)
+On the wire, it's just text:
+  GET /wireshark-labs/INTRO-wireshark-file1.html HTTP/1.1
+  Host: gaia.cs.umass.edu
+
+  HTTP/1.1 200 OK
+  Content-Type: text/html; charset=UTF-8
+Real code (Python):
+  import requests
+  r = requests.get("http://gaia.cs.umass.edu/wireshark-labs/INTRO-wireshark-file1.html")
+  r.status_code   # 200
+Wireshark filter: http (expect very little: almost every site uses HTTPS now)
+
+
+== 14. Status codes are HTTP's return values ==
+Every response starts with a status line like HTTP/1.1 200 OK. The first digit is the category.
+  1xx Informational  "Hold on, there's more"  (101 Switching Protocols)
+  2xx Success        "It worked"              (200 OK)
+  3xx Redirection    "It's over there"        (301 Moved Permanently)
+  4xx Client error   "You messed up"          (404 Not Found, 401 Unauthorized)
+  5xx Server error   "We messed up"           (500 Internal Server Error)
+In code, 4xx and 5xx become exceptions: r.raise_for_status() raises HTTPError.
+In the lab: the server answers your first request with 401 Unauthorized. Watch what your client sends next.
+
+
+== 15. HTTPS: HTTP inside TLS ==
+TLS (Transport Layer Security) wraps a TCP connection in encryption and proves the server is who it says it is.
+HTTPS is plain HTTP sent through TLS, on port 443.
+- Almost all web traffic you capture today is TLS or QUIC. Wireshark sees that you talked, not what you said.
+- It can still see the server name your computer sends first (SNI), unless the site uses Encrypted Client Hello.
+- HTTP/2 (2015) speeds up HTTPS. HTTP/3 (2022) runs over QUIC, on UDP port 443.
+Real code (Python):
+  import socket, ssl
+  ctx = ssl.create_default_context()
+  raw = socket.create_connection(("example.com", 443))
+  s = ctx.wrap_socket(raw, server_hostname="example.com")   # server_hostname (the SNI) is sent unencrypted
+  s.version()   # 'TLSv1.3'
+Wireshark filter: tls.handshake.extensions_server_name
+
+
+== 16. FTP: File Transfer Protocol (layer 7, application) ==
+Moves files between a client and a server (imagine that), on ports 20 and 21.
+It was designed long before anyone worried about eavesdroppers.
+- Your username and password cross the network as plain text.
+- SFTP (SSH File Transfer Protocol, port 22) is the secure replacement.
+- TFTP (Trivial FTP, UDP port 69) moves small files with no login at all.
+Real code (Python, example server):
+  from ftplib import FTP
+  ftp = FTP("ftp.example.com")
+  ftp.login("alice", "hunter2")   # on the wire: USER alice / PASS hunter2
+Wireshark filter: ftp
+
+
+== 17. BONUS PROTOCOL: Telnet, remote login in plain text ==
+Before SSH, telnet was how you logged in to another computer's terminal.
+Everything you type, passwords included, crosses the network as plain text.
+- TCP port 23.
+- SSH (Secure Shell, port 22) is basically secure telnet.
+- Capture it, then right-click a packet and choose Follow, then TCP Stream, to read the whole conversation.
+Try it:
+  Mac / Linux: nc towel.blinkenlights.nl 23
+  Windows:     telnet towel.blinkenlights.nl   (turn on "Telnet Client" in Windows Features first)
+Wireshark filter: tcp.port == 23
+
+
+== 18. BONUS PROTOCOLS AGAIN: two more you'll see in every capture (last slide I promise) ==
+QUIC (UDP port 443): the encrypted transport under HTTP/3. It rebuilds TCP's reliability and TLS's encryption
+on top of UDP, so connections start faster. Filter: quic
+mDNS (UDP port 5353): Multicast DNS, devices announcing themselves on your local network, like printers and
+AirPlay speakers. It's how your laptop finds the printer without anyone typing an IP address. Filter: mdns
+
+
+== 19. Time 4 Lab ==
+github.com/ToofastTurnip/Wireshark-Lab
+Only capture on networks you own or have permission to monitor.
